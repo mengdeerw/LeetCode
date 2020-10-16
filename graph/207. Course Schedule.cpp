@@ -21,7 +21,7 @@ public:
         return true;
     }
     
-    // return false (cycle) when a node is marked as visiting 
+    // return true (cycle) when a node is marked as visiting 
     bool dfs(vector<vector<int>> &graph, int curr, vector<int> &visited) {
         if (visited[curr] == 0) return true;
         if (visited[curr] == 1) return false;
@@ -36,6 +36,7 @@ public:
         
         // mark as visited
         visited[curr] = 1;
+        // means no cycle, ok
         return false;
     }
 };
@@ -78,5 +79,41 @@ public:
         }
         
         return true;
+    }
+};
+
+/*
+3. DFS finding cycles;
+   Time complexity: O(n^2)
+*/
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map<int, unordered_set<int>> graph;
+        
+        for (const auto& pair: prerequisites) {
+            graph[pair[1]].insert(pair[0]);
+        }
+        
+        for (int i = 0; i < numCourses; i++) {
+            vector<int> visited (numCourses, 0);
+            if (isCycle(graph, i, i, visited))
+                 return false;
+        }
+        
+        return true;
+    }
+    
+    bool isCycle(unordered_map<int, unordered_set<int>>& graph, int start, int curr, vector<int>& visited) {
+        if (curr == start && visited[curr]) return true;
+        
+        for (int next: graph[curr]) {
+            if (visited[next]) continue;
+            visited[next] = true;
+            if (isCycle(graph, start, next, visited))
+                return true;
+        }
+        return false;
     }
 };
