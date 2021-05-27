@@ -31,7 +31,7 @@ private:
     int lastPos(vector<int>& nums, int target) {
         int left = 0, right = nums.size();
         while (left < right) {
-            int mid = (left + right) / 2;
+            int mid = left + (right - left) / 2; // directly calculate (l+r)/2 might cause overflow!!!
             if (nums[mid] > target) {
                 right = mid;
             } else {
